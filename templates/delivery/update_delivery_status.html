@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Update Delivery Status</title>
+  </head>
+  <body>
+    <h1>Update Delivery Status</h1>
+    <form method="POST">
+      {% csrf_token %}
+      <div>
+        <label for="delivery_id">Delivery ID:</label>
+        <input type="text" name="delivery_id" id="delivery_id">
+      </div>
+      <div>
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+          <option value="collected">Collected</option>
+          <option value="on_transit">On Transit</option>
+          <option value="shipped">Shipped</option>
+        </select>
+      </div>
+      <input type="submit" value="Update Status">
+    </form>
+  </body>
+</html>

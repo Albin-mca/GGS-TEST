@@ -1,15 +1,20 @@
+import string
+from random import random, randint
+
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.text import slugify
 
+from category.models import Category
 from orders.models import Order, OrderProduct
 from store.models import Product
 from .forms import RegistrationForm, UserForm, UserProfileForm
 from .models import Account, UserProfile
 
 from carts.views import _cart_id
-from carts.models import Cart,CartItem
+from carts.models import Cart, CartItem
 import requests
 
 # Verification email
@@ -19,9 +24,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
-
-
 
 
 # Create your views here.
@@ -34,8 +36,10 @@ def register(request):
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+            # is_seller = form.cleaned_data['is_seller']
             username = email.split("@")[0]
-            user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
+            user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email,
+                                               username=username, password=password)
             user.phone_number = phone_number
             user.save()
 
@@ -48,31 +52,24 @@ def register(request):
             # USER ACTIVATION
             current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
-            message = render_to_string('accounts/account_verification_email.html', {
-                'user': user,
-                'domain': current_site,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user),
-            })
+            message = render_to_string('accounts/account_verification_email.html',
+                                       {'user': user, 'domain': current_site,
+                                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                        'token': default_token_generator.make_token(user), })
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
             # messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
             return redirect('/accounts/login/?command=verification&email=' + email)
 
-            messages.success(request,'REGISTRATION SUCCESSFULL')
+            messages.success(request, 'REGISTRATION SUCCESSFULL')
             return redirect('register')
 
     else:
         form = RegistrationForm()
-    context = {
-        'form': form,
-    }
+    context = {'form': form, }
 
-    return render (request, 'accounts/register.html', context)
-
-
-
+    return render(request, 'accounts/register.html', context)
 
 
 def login(request):
@@ -81,6 +78,12 @@ def login(request):
         password = request.POST['password']
 
         user = auth.authenticate(email=email, password=password)
+        ab = Account.objects.get(email=email)
+        cat = Category.objects.all()
+
+        if ab.is_seller == True:
+            bb = ab.id
+            return render(request, 'accounts/seller-homepage.html', {'bb': bb, 'cat': cat})
 
         if user is not None:
             try:
@@ -89,13 +92,13 @@ def login(request):
                 if is_cart_item_exists:
                     cart_item = CartItem.objects.filter(cart=cart)
 
-                    #getting the proudct variations by cart id
+                    # getting the proudct variations by cart id
                     product_variation = []
                     for item in cart_item:
-                        variation=item.variations.all()
+                        variation = item.variations.all()
                         product_variation.append(list(variation))
 
-                    #get the cart items from user to acces his product variations
+                    # get the cart items from user to acces his product variations
                     cart_item = CartItem.objects.filter(user=user)
                     ex_var_list = []
                     id = []
@@ -109,16 +112,16 @@ def login(request):
 
                     for pr in product_variation:
                         if pr in ex_var_list:
-                            index=ex_var_list.index(pr)
-                            item_id= id[index]
-                            item=CartItem.objects.get(id=item_id)
+                            index = ex_var_list.index(pr)
+                            item_id = id[index]
+                            item = CartItem.objects.get(id=item_id)
                             item.quantity += 1
-                            item.user=user
+                            item.user = user
                             item.save()
                         else:
-                            cart_item= CartItem.objects.filter(cart=cart)
+                            cart_item = CartItem.objects.filter(cart=cart)
                             for item in cart_item:
-                                item.user=user
+                                item.user = user
                                 item.save()
             except:
                 pass
@@ -126,8 +129,8 @@ def login(request):
             messages.success(request, 'You are logged in.')
             url = request.META.get('HTTP_REFERER')
             try:
-                query=requests.utils.urlparse(url).query
-                params= dict(x.split('=') for x in query.split('&'))
+                query = requests.utils.urlparse(url).query
+                params = dict(x.split('=') for x in query.split('&'))
                 if 'next' in params:
                     nextPage = params['next']
                     return redirect(nextPage)
@@ -139,7 +142,8 @@ def login(request):
 
     return render(request, 'accounts/login.html')
 
-@login_required(login_url = 'login')
+
+@login_required(login_url='login')
 def logout(request):
     auth.logout(request)
     messages.success(request, 'You are logged out.')
@@ -162,7 +166,8 @@ def activate(request, uidb64, token):
         messages.error(request, 'Invalid activation link')
         return redirect('register')
 
-@login_required(login_url = 'login')
+
+@login_required(login_url='login')
 def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
     orders_count = orders.count()
@@ -170,13 +175,8 @@ def dashboard(request):
     auto_search = Product.objects.all()
 
     userprofile = UserProfile.objects.get(user_id=request.user.id)
-    context = {
-        'orders_count': orders_count,
-        'userprofile': userprofile,
-        'auto_search': auto_search,
-    }
+    context = {'orders_count': orders_count, 'userprofile': userprofile, 'auto_search': auto_search, }
     return render(request, 'accounts/dashboard.html', context)
-
 
 
 def forgotPassword(request):
@@ -188,12 +188,11 @@ def forgotPassword(request):
             # Reset password email
             current_site = get_current_site(request)
             mail_subject = 'Reset Your Password'
-            message = render_to_string('accounts/reset_password_email.html', {
-                'user': user,
-                'domain': current_site,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user),
-            })
+            message = render_to_string('accounts/reset_password_email.html', {'user': user, 'domain': current_site,
+                                                                              'uid': urlsafe_base64_encode(
+                                                                                  force_bytes(user.pk)),
+                                                                              'token': default_token_generator.make_token(
+                                                                                  user), })
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
@@ -204,6 +203,7 @@ def forgotPassword(request):
             messages.error(request, 'Account does not exist!')
             return redirect('forgotPassword')
     return render(request, 'accounts/forgotPassword.html')
+
 
 def resetpassword_validate(request, uidb64, token):
     try:
@@ -219,6 +219,7 @@ def resetpassword_validate(request, uidb64, token):
     else:
         messages.error(request, 'This link has been expired!')
         return redirect('login')
+
 
 def resetPassword(request):
     if request.method == 'POST':
@@ -245,10 +246,7 @@ def my_orders(request):
 
     auto_search = Product.objects.all()
 
-    context = {
-        'orders': orders,
-        'auto_search': auto_search,
-    }
+    context = {'orders': orders, 'auto_search': auto_search, }
     return render(request, 'accounts/my_orders.html', context)
 
 
@@ -269,12 +267,8 @@ def edit_profile(request):
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=userprofile)
-    context = {
-        'user_form': user_form,
-        'profile_form': profile_form,
-        'userprofile': userprofile,
-        'auto_search': auto_search,
-    }
+    context = {'user_form': user_form, 'profile_form': profile_form, 'userprofile': userprofile,
+               'auto_search': auto_search, }
     return render(request, 'accounts/edit_profile.html', context)
 
 
@@ -286,8 +280,6 @@ def change_password(request):
         confirm_password = request.POST['confirm_password']
 
         user = Account.objects.get(username__exact=request.user.username)
-
-
 
         if new_password == confirm_password:
             success = user.check_password(current_password)
@@ -314,9 +306,53 @@ def order_detail(request, order_id):
     for i in order_detail:
         subtotal += i.product_price * i.quantity
 
-    context = {
-        'order_detail': order_detail,
-        'order': order,
-        'subtotal': subtotal,
-    }
+    context = {'order_detail': order_detail, 'order': order, 'subtotal': subtotal, }
     return render(request, 'accounts/order_detail.html', context)
+
+
+
+
+
+
+
+
+
+def s_add_product(request):
+    product_name = request.POST['product_name']
+    description = request.POST['description']
+    price = request.POST['price']
+    stock = request.POST['stock']
+    category = request.POST.get('category')
+    s_id = request.POST['s_id']
+    images = request.FILES.get('images')
+    slug = slugify(product_name)
+
+    product = Product(product_name=product_name, slug=slug, description=description, price=price, stock=stock,
+                      category_id=category, images=images, seller_id=s_id)
+    product.save()
+    return render(request, 'accounts/seller_product_view.html')
+
+
+
+
+def s_view_product(request):
+    s_id = request.POST['s_id']
+    qq = Product.objects.filter(seller_id=s_id)
+    return render(request, 'accounts/seller_product_view.html', {'qq': qq})
+
+
+def s_homepage(request):
+    return render(request, 'accounts/seller-homepage.html')
+
+def s_add(request):
+    cat = Category.objects.all()
+    s_id = request.POST.get('s_id')
+    return render(request, 'accounts/seller_form.html', {'cat':cat, 's_id':s_id})
+
+
+
+
+
+
+
+

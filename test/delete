@@ -1,0 +1,25 @@
+
+driver.find_element("xpath", "/html/body/header/section/div/div/a[2]").click()
+time.sleep(3)
+driver.find_element("xpath", "/html/body/section[2]/div/div/main/div/div[1]/figure/figcaption/a").click()
+time.sleep(3)
+
+driver.find_element("xpath", "/html/body/section/div/div[1]/div/main/form/article/div[3]/div/select/option[2]").click()
+time.sleep(3)
+driver.find_element("xpath", "/html/body/section/div/div[1]/div/main/form/article/div[4]/div/select/option[2]").click()
+time.sleep(3)
+driver.find_element("xpath", "/html/body/section/div/div[1]/div/main/form/article/button/span").click()
+time.sleep(3)
+print("Added to Cart")
+
+# driver.find_element("xpath", "/html/body/section/div/div/aside[1]/div/table/tbody/tr/td[2]/div/div/div[2]/form/button/i").click()
+# time.sleep(3)
+# print("Increased Product")
+
+# driver.find_element("xpath", "/html/body/section/div/div/aside[1]/div/table/tbody/tr/td[4]/a").click()
+# time.sleep(3)
+# print("Remove Product")
+
+driver.find_element("xpath", "/html/body/header/section/div/div/div[3]/div/div/div/a[2]").click()
+time.sleep(3)
+# print("Logout")

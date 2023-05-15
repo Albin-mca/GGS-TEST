@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm">
+<div class="container">
+
+<div class="intro-banner-wrap">
+	<img src="{% static 'images/banners/b1.jpg' %}" class="img-fluid rounded">
+</div>
+
+</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+
+<!-- ========================= SECTION  ========================= -->
+<section class="section-name padding-y-sm">
+<div class="container">
+
+<header class="section-heading">
+	<a href="{% url 'store' %}" class="btn btn-outline-primary float-right">See all</a>
+	<h3 class="section-title">Popular products</h3>
+</header><!-- sect-heading -->
+
+
+
+
+<div class="row">
+	{% for product in products %}
+	<div class="col-md-3">
+		<div class="card card-product-grid">
+			<a href="{{ product.get_url }}" class="img-wrap"> <img src="{{ product.images.url }}"> </a>
+			<figcaption class="info-wrap">
+				<a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+				<div class="price mt-1">₹ {{ product.price }}</div> <!-- price-wrap.// -->
+				<div class="rating-star">
+					<span>
+						<i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+						</span>
+				</div>
+			</figcaption>
+		</div>
+	</div> <!-- col.// -->
+	{% endfor %}
+</div> <!-- row.// -->
+
+
+
+</div><!-- container // -->
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+
+
+
+{#    <!-- ========================= SECTION  ========================= -->#}
+{#<section class="section-name padding-y-sm">#}
+{#    <div class="container">#}
+{##}
+{#        <header class="section-heading">#}
+{#            <h3 class="section-title">Go Green Store Chatbot</h3>#}
+{#        </header><!-- sect-heading -->#}
+{##}
+{#        <div class="row d-flex justify-content-center">#}
+{#            <div class="col-lg-10">#}
+{##}
+{#                <div class="chat-container">#}
+{#                    <div class="chat-box">#}
+{#                        <ul class="chat-list"></ul>#}
+{#                    </div>#}
+{#                    <form class="chat-form">#}
+{#                        {% csrf_token %}#}
+{#                        <div class="input-group">#}
+{#                            <input type="text" class="form-control" placeholder="Type your message...">#}
+{#                            <div class="input-group-append">#}
+{#                                <button class="btn btn-outline-secondary" type="submit">Send</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </form>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#    </div><!-- container // -->#}
+{#</section>#}
+{#<!-- ========================= SECTION  END// ========================= -->#}
+{##}
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#<script>#}
+{#    $(document).ready(function() {#}
+{#        // Set up variables#}
+{#        var $form = $('.chat-form');#}
+{#        var $input = $form.find('input');#}
+{#        var $list = $('.chat-list');#}
+{#        var $scroll = $('.chat-box');#}
+{#        var model_engine = "text-davinci-003";#}
+{#        var completion_text = "";#}
+{##}
+{#        // Function to add messages to chat#}
+{#        function addMessage(type, message) {#}
+{#            $list.append('<li class="' + type + '">' + message + '</li>');#}
+{#            $scroll.scrollTop($scroll[0].scrollHeight);#}
+{#        }#}
+{##}
+{#        // Function to send a message#}
+{#        function sendMessage() {#}
+{#            var message = $input.val();#}
+{#            if (message) {#}
+{#                addMessage('outgoing-message', message);#}
+{#                $input.val('');#}
+{##}
+{#                // Call OpenAI API to generate completion#}
+{#                $.post("{% url 'generate_completion' %}", {prompt: message}).done(function(data) {#}
+{#                    completion_text = data.completion_text;#}
+{#                    addMessage('incoming-message', completion_text);#}
+{#                }).fail(function() {#}
+{#                    addMessage('incoming-message', 'Sorry, there was an error processing your request. Please try again later.');#}
+{#                });#}
+{#            }#}
+{#        }#}
+{##}
+{#        // Send message when form is submitted#}
+{#        $form.on('submit', function(event) {#}
+{#            event.preventDefault();#}
+{#            sendMessage();#}
+{#        });#}
+{#    });#}
+{#</script>#}
+
+
+
+
+{#CHATBOT#}
+<script type="text/javascript">
+    (function(d, m){
+        var kommunicateSettings =
+            {"appId":"3075f0a53ca6c9e9a9cac15b95036afac","popupWidget":true,"automaticChatOpenOnNavigation":true};
+        var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+        s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+        var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+        window.kommunicate = m; m._globals = kommunicateSettings;
+    })(document, window.kommunicate || {});
+/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+</script>
+
+
+</body>
+</html>
+
+{% endblock %}

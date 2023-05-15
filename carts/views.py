@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 
+from accounts.models import UserProfile
 from carts.models import Cart, CartItem
 from store.models import Product, Variation
 
@@ -202,5 +203,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
     except ObjectDoesNotExist:
         pass  # just ignore
 
-    context = {'total': total, 'quantity': quantity, 'cart_items': cart_items, 'tax': tax, 'grand_total': grand_total, }
+    address=UserProfile.objects.filter(user_id=request.user.id)
+
+    context = {'total': total, 'quantity': quantity, 'cart_items': cart_items, 'tax': tax, 'grand_total': grand_total,'address':address}
     return render(request, 'store/checkout.html', context)

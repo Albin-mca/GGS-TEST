@@ -31,11 +31,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     # 'jet',
-    'material',
-    'material.admin',
+    # 'material',
+    # 'material.admin',
 
-    # 'django.contrib.admin',    #disabled due to material icon
+    'django.contrib.admin',    #disabled due to material icon
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'fireapp',
+    # 'delivery',
+    'seller',
 ]
 
 MIDDLEWARE = [
@@ -156,15 +159,16 @@ EMAIL_USE_TLS = True
 
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Your Site Name",
-    "site_header": "Your Site Name",
-    "site_logo": "your_logo.png",
-    "welcome_sign": "Welcome to Your Site Name",
+    # "show_ui_builder" : True,
+    "site_title": "GOGREENSTORE",
+    "site_header": "GOGREENSTORE",
+    "site_logo": "images/logo11.png",
+    "welcome_sign": "GOGREENSTORE",
     "search_model": "auth.User",
     "user_avatar": "accounts.Profile.avatar",
     "topmenu_links": [
         {"name": "View Site", "url": "/", "new_window": False},
-        {"name": "Github", "url": "https://github.com/", "new_window": True},
+        {"name": "Realtime Inventory", "url": "http://127.0.0.1:8000/fire_index/", "new_window": True},
     ],
     "show_sidebar": True,
     "navigation_expanded": False,
@@ -173,4 +177,37 @@ JAZZMIN_SETTINGS = {
     "order_with_respect_to": "contenttype",
     "custom_css": None,
     "custom_js": None,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-success",
+    "accent": "accent-primary",
+    "navbar": "navbar-success navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": True,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-light-lime",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-outline-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": False
 }

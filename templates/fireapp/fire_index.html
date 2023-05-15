@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<meta http-equiv="refresh" content="2">
+
+<html>
+  <head>
+    <title>GOGREENSTORE-INVENTORY</title>
+    <style>
+      /* Style the battery container */
+      .battery-container {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        margin: 0 auto;
+      }
+
+      /* Style the battery frame */
+      .battery-frame {
+        width: 100%;
+        height: 100%;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      /* Style the battery level */
+      .battery-level {
+        width: 100%;
+        height: 100%;
+        background-color: #4CAF50;
+        position:absolute;
+        bottom: 0;
+        left: 0;
+        transition: height 0.5s ease-out;
+      }
+
+      /* Style the battery level when it's low */
+      .battery-level--low {
+        background-color: #ff9800;
+      }
+
+      /* Style the battery level when it's critically low */
+      .battery-level--critically-low {
+        background-color: #f44336;
+      }
+    </style>
+  </head>
+  <body>
+
+  <h1><center>GOGREENSTORE-INVENTORY</center></h1>
+  <p><center>Length of the Rack : 100 cm</center></p>
+  <p><center>Hi, Last Length is : {{last_length}}</center></p>
+
+
+
+  <br>
+
+
+    <!-- Create the battery container -->
+    <div class="battery-container">
+      <!-- Create the battery frame -->
+      <div class="battery-frame">
+        <!-- Create the battery level -->
+        <div class="battery-level" id="battery-level"></div>
+      </div>
+    </div>
+
+    <script>
+      // Get the battery level element
+      const batteryLevel = document.getElementById("battery-level");
+
+      // Listen for changes to the slider value
+      function updateBatteryLevel() {
+        // Get the slider value
+        const value = parseInt("{{last_length}}");
+
+          let total = 100;
+          let result= total-value
+
+        // Calculate the battery level height
+        const height = (result / 100) * 100;
+
+        // Update the battery level height and color based on the value
+        if (result >= 50) {
+          batteryLevel.style.height = `${height}%`;
+          batteryLevel.classList.remove("battery-level--low");
+          batteryLevel.classList.remove("battery-level--critically-low");
+        } else if (result >= 20) {
+          batteryLevel.style.height = `${height}%`;
+          batteryLevel.classList.add("battery-level--low");
+          batteryLevel.classList.remove("battery-level--critically-low");
+        } else {
+          batteryLevel.style.height = "20%";
+          batteryLevel.classList.remove("battery-level--low");
+          batteryLevel.classList.add("battery-level--critically-low");
+        }
+      }
+
+      updateBatteryLevel();
+
+    </script>
+  </body>
+</html>

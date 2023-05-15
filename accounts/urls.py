@@ -22,4 +22,9 @@ urlpatterns = [
     path('order_detail/<int:order_id>/', views.order_detail, name='order_detail'),
 
 
+    path('s_add_product/', views.s_add_product, name='s_add_product'),
+    path('s_view_product/', views.s_view_product, name='s_view_product'),
+    path('s_add/', views.s_add, name='s_add'),
+
+
 ]
