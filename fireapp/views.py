@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from datetime import datetime, timedelta
 
@@ -25,7 +26,7 @@ authe = firebase.auth()
 database = firebase.database()
 
 
-
+@login_required(login_url='login')
 def fire_index(request):
     # Accessing our Firebase data and storing it in a variable
     distance = database.child('distance').get().val()
