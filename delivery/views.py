@@ -61,7 +61,7 @@ def d_login(request):
             messages.error(request, 'Invalid login credentials3')
             return redirect('d_login')
 
-    return render(request, 'delivery/d_login.html')
+    return render(request, 'delivery/d_login1.html')
 
 
 # def delivery_home(request):
