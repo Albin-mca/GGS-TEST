@@ -1,0 +1,53 @@
+<!-- registration.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Delivery Boy Registration</h2>
+
+  <form method="post" action="{% url 'd_boy_register' %}">
+    {% csrf_token %}
+
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" name="name" id="name" required>
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" required>
+    </div>
+
+    <div>
+      <label for="phone_number">Phone Number:</label>
+      <input type="text" name="phone_number" id="phone_number" required>
+    </div>
+
+    <div>
+      <label for="address">Address:</label>
+      <input type="text" name="address" id="address" required>
+    </div>
+
+    <div>
+      <label for="vehicle_no">Vehicle No:</label>
+      <input type="text" name="vehicle_no" id="vehicle_no" required>
+    </div>
+
+    <div>
+      <label for="license_no">License No:</label>
+      <input type="text" name="license_no" id="license_no" required>
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" required>
+    </div>
+
+    <div>
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" name="confirm_password" id="confirm_password" required>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+{% endblock %}
