@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from accounts.models import DeliveryBoy, tbl_DeliveryBoy
+from accounts.models import Account, DeliveryBoy, tbl_DeliveryBoy
+from orders.models import Order
 
 # Create your views here.
 def d_register(request):
@@ -63,15 +64,57 @@ def d_login(request):
 
 
 
+# def delivery_home(request):
+#     if 'email' in request.session:
+#         user=request.session['email']
+#         data={
+#             'user':user
+#         }
+#         return render(request, 'delivery/delivery_home.html',data)
+#     else:
+#         return redirect(d_login)
+    
+    
+
 def delivery_home(request):
-    if 'email' in request.session:
-        user=request.session['email']
-        data={
-            'user':user
-        }
-        return render(request, 'delivery/delivery_home.html',data)
-    else:
-        return redirect(d_login)
+    # Get the relevant order data from the Order model
+    order = Order.objects.first()  # Adjust the query to retrieve the desired order
+    
+    context = {
+        'user': request.user,  # Assuming you have a user object for the delivery boy
+        'orderID': order.order_number,
+        'customerName': order.full_name(),
+        'deliveryAddress': order.full_address(),
+        'deliveryTime': order.created_at, 
+        'city':order.city,
+        'phone':order.phone,
+        'status':order.status,
+        
+    }
+
+    return render(request, 'delivery/delivery_home.html', context)
+
+
+# def delivery_home(request):
+#     if 'email' in request.session:
+#         email = request.session['email']
+#         user = Account.objects.get(email=email)  # Assuming you have an Account model for the delivery boy
+#         order = Order.objects.first()  # Adjust the query to retrieve the desired order
+        
+#         context = {
+#             'user': user,
+#             'orderID': order.order_number,
+#             'customerName': order.full_name(),
+#             'deliveryAddress': order.full_address(),
+#             'deliveryTime': order.created_at,  # Example usage, adjust as needed
+#         }
+        
+#         return render(request, 'delivery/delivery_home.html', context)
+#     else:
+#         return redirect('d_login')
+
+
+
     
 
 def d_logout(request):
