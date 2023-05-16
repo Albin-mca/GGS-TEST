@@ -83,7 +83,7 @@ def login(request):
 
         if ab.is_seller == True:
             bb = ab.id
-            return render(request, 'accounts/seller-homepage.html', {'bb': bb, 'cat': cat})
+            return render(request, 'seller/seller_homepage1.html', {'bb': bb, 'cat': cat})
 
         if user is not None:
             try:
@@ -330,7 +330,7 @@ def s_add_product(request):
     product = Product(product_name=product_name, slug=slug, description=description, price=price, stock=stock,
                       category_id=category, images=images, seller_id=s_id)
     product.save()
-    return render(request, 'accounts/seller_product_view.html')
+    return render(request, 'seller/seller_homepage1.html')
 
 
 
@@ -338,16 +338,16 @@ def s_add_product(request):
 def s_view_product(request):
     s_id = request.POST['s_id']
     qq = Product.objects.filter(seller_id=s_id)
-    return render(request, 'accounts/seller_product_view.html', {'qq': qq})
+    return render(request, 'seller/seller_product_view.html', {'qq': qq})
 
 
 def s_homepage(request):
-    return render(request, 'accounts/seller-homepage.html')
+    return render(request, 'seller/seller_homepage1.html')
 
 def s_add(request):
     cat = Category.objects.all()
     s_id = request.POST.get('s_id')
-    return render(request, 'accounts/seller_form.html', {'cat':cat, 's_id':s_id})
+    return render(request, 'seller/seller_form1.html', {'cat':cat, 's_id':s_id})
 
 
 

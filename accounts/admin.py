@@ -25,3 +25,37 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(Account,AccountAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+
+
+
+
+
+
+
+
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+
+from .models import DeliveryBoy
+
+class DeliveryBoyAdmin(UserAdmin):
+    filter_horizontal = ()
+    list_display = ('name', 'email', 'phone_number', 'address', 'vehicle_no', 'license_no', 'is_active', 'is_deliveryboy')
+    list_filter = ('is_active', 'is_deliveryboy')
+    fieldsets = (
+        (None, {'fields': ('name', 'email', 'password')}),
+        ('Contact Information', {'fields': ('phone_number', 'address')}),
+        ('Delivery Information', {'fields': ('vehicle_no', 'license_no')}),
+        ('Permissions', {'fields': ('is_active', 'is_deliveryboy')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('name', 'email', 'phone_number', 'address', 'vehicle_no', 'license_no', 'password1', 'password2', 'is_active', 'is_deliveryboy'),
+        }),
+    )
+
+    ordering = ('email',)  # Specify the field to use for ordering
+
+admin.site.register(DeliveryBoy, DeliveryBoyAdmin)
+

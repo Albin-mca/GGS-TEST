@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('',include('fireapp.urls')),
 
-    # path('',include('delivery.urls')),
+    path('',include('delivery.urls')),
 
     path('',include('seller.urls')),
 

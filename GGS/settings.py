@@ -35,8 +35,9 @@ INSTALLED_APPS = [
     # 'jet',
     # 'material',
     # 'material.admin',
+    # disabled due to material icon
 
-    'django.contrib.admin',    #disabled due to material icon
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'fireapp',
-    # 'delivery',
+
+    'delivery',
     'seller',
 ]
 
@@ -162,7 +164,7 @@ JAZZMIN_SETTINGS = {
     # "show_ui_builder" : True,
     "site_title": "GOGREENSTORE",
     "site_header": "GOGREENSTORE",
-    "site_logo": "images/logo11.png",
+    "site_logo": "images/logo12.png",
     "welcome_sign": "GOGREENSTORE",
     "search_model": "auth.User",
     "user_avatar": "accounts.Profile.avatar",
@@ -190,8 +192,8 @@ JAZZMIN_UI_TWEAKS = {
     "no_navbar_border": False,
     "navbar_fixed": True,
     "layout_boxed": False,
-    "footer_fixed": True,
-    "sidebar_fixed": True,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
     "sidebar": "sidebar-light-lime",
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,

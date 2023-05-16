@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Delivery Boy Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .logout-btn {
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-$END$
+    <div class="container">
+        <h1>Welcome, Delivery Boy!</h1>
+        <p>You are logged in as: <strong>{{user}}</strong></p>
+        
+        <!-- Delivery-related information -->
+        <h2>Delivery Details</h2>
+        <ul>
+            <li>Order ID: {{orderID}}</li>
+            <li>Customer: {{customerName}}</li>
+            <li>Delivery Address: {{deliveryAddress}}</li>
+            <li>Delivery Time: {{deliveryTime}}</li>
+        </ul>
+        
+        <!-- Logout button -->
+        <form action="{% url 'd_logout' %}" method="post">
+            {% csrf_token %}
+            <button class="logout-btn" type="submit">Logout</button>
+        </form>
+
+    
+
+
+    </div>
 </body>
 </html>
